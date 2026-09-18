@@ -1,14 +1,22 @@
 package com.umg.sgauapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.umg.sgauapp.model.Usuario
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -17,31 +25,53 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Interfaz visual básica con Jetpack Compose
         setContent {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
+            Column(
+                modifier = Modifier.fillMaxSize().padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "SgauApp - Conectando a Cloud Run...")
-            }
-        }
+                Text(text = "SgauApp - Gestión Académica")
+                Spacer(modifier = Modifier.height(32.dp))
 
-        // Llamada a tu backend usando Retrofit
-        val apiService = RetrofitClient.instance.create(ApiService::class.java)
+                Button(onClick = {
+                    val intent = Intent(this@MainActivity, ListaDatosActivity::class.java)
+                    intent.putExtra("TIPO", "USUARIOS")
+                    startActivity(intent)
+                }) {
+                    Text(text = "Ver Usuarios (RecyclerView)")
+                }
 
-        apiService.obtenerUsuarios().enqueue(object : Callback<List<Any>> {
-            override fun onResponse(call: Call<List<Any>>, response: Response<List<Any>>) {
-                if (response.isSuccessful) {
-                    Log.d("API_SUCCESS", "Datos recibidos: ${response.body()}")
-                } else {
-                    Log.e("API_ERROR", "Código de error: ${response.code()}")
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(onClick = {
+                    val intent = Intent(this@MainActivity, ListaDatosActivity::class.java)
+                    intent.putExtra("TIPO", "ESTUDIANTES")
+                    startActivity(intent)
+                }) {
+                    Text(text = "Ver Estudiantes (RecyclerView)")
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(onClick = {
+                    val intent = Intent(this@MainActivity, ListaDatosActivity::class.java)
+                    intent.putExtra("TIPO", "CARRERAS")
+                    startActivity(intent)
+                }) {
+                    Text(text = "Ver Carreras (RecyclerView)")
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(onClick = {
+                    val intent = Intent(this@MainActivity, ListaDatosActivity::class.java)
+                    intent.putExtra("TIPO", "CURSOS")
+                    startActivity(intent)
+                }) {
+                    Text(text = "Ver Cursos (RecyclerView)")
                 }
             }
-
-            override fun onFailure(call: Call<List<Any>>, t: Throwable) {
-                Log.e("API_FAILURE", "Fallo de conexión: ${t.message}")
-            }
-        })
+        }
     }
 }
