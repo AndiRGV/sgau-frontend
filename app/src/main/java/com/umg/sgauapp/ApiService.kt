@@ -1,5 +1,9 @@
 package com.umg.sgauapp
 
+import com.umg.sgauapp.model.Carrera
+import com.umg.sgauapp.model.Curso
+import com.umg.sgauapp.model.Estudiante
+import com.umg.sgauapp.model.Usuario
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -9,26 +13,26 @@ interface ApiService {
 
     // --- USUARIOS ---
     @GET("api/usuarios")
-    fun obtenerUsuarios(): Call<List<Any>> // Cambia List<Any> por tu modelo DTO de usuario cuando lo crees
+    fun obtenerUsuarios(): Call<List<Usuario>>
 
     @GET("api/usuarios/{id}")
-    fun obtenerUsuarioPorId(@Path("id") id: Long): Call<Any>
+    fun obtenerUsuarioPorId(@Path("id") id: Long): Call<Usuario>
 
     // --- ESTUDIANTES ---
     @GET("api/estudiantes")
-    fun obtenerEstudiantes(): Call<List<Any>>
+    fun obtenerEstudiantes(): Call<List<Estudiante>>
 
     @GET("api/estudiantes/{carne}")
-    fun obtenerEstudiantePorCarne(@Path("carne") carne: String): Call<Any>
+    fun obtenerEstudiantePorCarne(@Path("carne") carne: String): Call<Estudiante>
 
     @GET("api/estudiantes/buscar")
-    fun buscarEstudiantesPorNombre(@Query("nombre") nombre: String): Call<List<Any>>
+    fun buscarEstudiantesPorNombre(@Query("nombre") nombre: String): Call<List<Estudiante>>
 
     // --- CARRERAS ---
     @GET("api/carreras")
-    fun obtenerCarreras(): Call<List<Any>>
+    fun obtenerCarreras(): Call<List<Carrera>>
 
     // --- CURSOS ---
     @GET("api/cursos")
-    fun obtenerCursos(): Call<List<Any>>
+    fun obtenerCursos(): Call<List<Curso>>
 }
