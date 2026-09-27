@@ -1,4 +1,5 @@
 plugins {
+    id("com.google.gms.google-services")
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
 }
@@ -14,7 +15,7 @@ android {
         minSdk = 24
         targetSdk = 37
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -57,4 +58,12 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
+    // Importar la plataforma Firebase BoM
+    implementation(platform("com.google.firebase:firebase-bom:33.9.0"))
+
+// Dependencia de Remote Config (para la estrategia de actualización)
+    implementation("com.google.firebase:firebase-config")
+
+// Opcional: Analytics si lo activaste
+    implementation("com.google.firebase:firebase-analytics")
 }
