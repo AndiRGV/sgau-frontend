@@ -2,7 +2,6 @@ package com.umg.sgauapp
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
@@ -16,18 +15,19 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.umg.sgauapp.model.Usuario
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val updateManager = UpdateManager(this)
+        updateManager.checkForUpdates()
+
         setContent {
             Column(
-                modifier = Modifier.fillMaxSize().padding(16.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
