@@ -16,7 +16,7 @@ interface ApiService {
     fun obtenerUsuarios(): Call<List<Usuario>>
 
     @GET("api/usuarios/{id}")
-    fun obtenerUsuarioPorId(@Path("id") id: Long): Call<Usuario>
+    fun obtenerUsuarioPorId(@Path("id") id: String): Call<Usuario>
 
     // --- ESTUDIANTES ---
     @GET("api/estudiantes")

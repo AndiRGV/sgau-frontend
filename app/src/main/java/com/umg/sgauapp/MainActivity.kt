@@ -30,9 +30,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val updateManager = UpdateManager(this)
-        updateManager.checkForUpdates()
-
         setContent {
             SgauAppTheme {
                 var isLoggedIn by remember { mutableStateOf(false) }
@@ -40,25 +37,33 @@ class MainActivity : ComponentActivity() {
                 if (!isLoggedIn) {
                     LoginScreen(
                         onLoginClick = { emailIngresado, passwordIngresada ->
-                            if (emailIngresado.isBlank() || passwordIngresada.isBlank()) {
+                            val correoLimpio = emailIngresado.trim()
+
+                            if (correoLimpio.isBlank()) {
                                 Toast.makeText(
                                     this@MainActivity,
-                                    "Por favor ingresa correo y contraseña",
+                                    "Por favor ingresa un correo válido",
                                     Toast.LENGTH_SHORT
                                 ).show()
                             } else {
-                                // Consultar usuarios a la API de Neon DB
+                                Toast.makeText(
+                                    this@MainActivity,
+                                    "Verificando credenciales...",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+
+                                // Consulta a la API de Neon DB
                                 RetrofitClient.apiService.obtenerUsuarios().enqueue(object : Callback<List<Usuario>> {
                                     override fun onResponse(
                                         call: Call<List<Usuario>>,
                                         response: Response<List<Usuario>>
                                     ) {
                                         if (response.isSuccessful) {
-                                            val listaUsuarios = response.body()
+                                            val listaUsuarios = response.body() ?: emptyList()
 
-                                            // Buscar si el correo ingresado existe en la base de datos
-                                            val usuarioValido = listaUsuarios?.find { usuario ->
-                                                usuario.email.equals(emailIngresado.trim(), ignoreCase = true)
+                                            // Compara limpiando espacios en blanco e ignorando mayúsculas/minúsculas
+                                            val usuarioValido = listaUsuarios.find { usuario ->
+                                                usuario.email.trim().equals(correoLimpio, ignoreCase = true)
                                             }
 
                                             if (usuarioValido != null) {
@@ -71,15 +76,15 @@ class MainActivity : ComponentActivity() {
                                             } else {
                                                 Toast.makeText(
                                                     this@MainActivity,
-                                                    "Credenciales inválidas o usuario no registrado",
-                                                    Toast.LENGTH_SHORT
+                                                    "El correo $correoLimpio no está registrado",
+                                                    Toast.LENGTH_LONG
                                                 ).show()
                                             }
                                         } else {
                                             Toast.makeText(
                                                 this@MainActivity,
-                                                "Error al verificar credenciales con el servidor",
-                                                Toast.LENGTH_SHORT
+                                                "Error de servidor HTTP ${response.code()}",
+                                                Toast.LENGTH_LONG
                                             ).show()
                                         }
                                     }
