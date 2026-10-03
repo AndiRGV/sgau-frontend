@@ -22,7 +22,7 @@ class ListaDatosActivity : AppCompatActivity() {
 
     private lateinit var rvDatos: RecyclerView
     private lateinit var tvTitulo: TextView
-    private val apiService = RetrofitClient.instance.create(ApiService::class.java)
+    private val apiService = RetrofitClient.apiService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
